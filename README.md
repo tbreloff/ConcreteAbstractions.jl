@@ -4,6 +4,15 @@
 
 Simulate OOP inheritance while using a (superior) Julia abstract type.  Fields and parameters of the "base type" are automatically inserted into the type definition of a "child type".  The "base type" is really an abstract type, but we store the internals of the type definition for later injection into the child definition.
 
+This package exports two macros: `@base` and `@extend`.  The purpose and usage is hopefully well understood from the example below.
+
+Install with:
+
+```julia
+Pkg.clone("https://github.com/tbreloff/ConcreteAbstractions.jl")
+using ConcreteAbstractions
+```
+
 The abstract definition:
 
 ```julia
