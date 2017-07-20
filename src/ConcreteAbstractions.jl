@@ -24,7 +24,7 @@ macro base(typeexpr::Expr)
     _base_types[name] = params, args
     # @show name
     esc(quote
-        abstract $name
+        abstract type $name end
     end)
 end
 
