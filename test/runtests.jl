@@ -1,5 +1,5 @@
 using ConcreteAbstractions
-using Base.Test
+using Test
 
 @base struct AbstractFoo{T}
     a
@@ -14,10 +14,9 @@ end
 
 @testset begin
     @test Foo <: AbstractFoo
-
     foo = Foo(10,10,10,[10],5)
     @test isa(foo, Foo{Int})
-    @test fieldnames(foo) == [:a,:b,:c,:d,:e]
+    @test fieldnames(typeof(foo)) == (:a,:b,:c,:d,:e)
     @test isa(foo.a, Int)
     @test isa(foo.b, Int)
     @test isa(foo.c, Int)
