@@ -1,14 +1,14 @@
 using ConcreteAbstractions
 using Base.Test
 
-@base type AbstractFoo{T}
+@base struct AbstractFoo{T}
     a
     b::Int
     c::T
     d::Vector{T}
 end
 
-@extend type Foo <: AbstractFoo
+@extend struct Foo <: AbstractFoo
     e::T
 end
 
