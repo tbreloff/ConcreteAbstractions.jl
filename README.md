@@ -16,7 +16,7 @@ using ConcreteAbstractions
 The abstract definition:
 
 ```julia
-@base type AbstractFoo{T}
+@base struct AbstractFoo{T}
     a
     b::Int
     c::T
@@ -27,14 +27,14 @@ end
 is really more like:
 
 ```julia
-abstract AbstractFoo
+abstract type AbstractFoo end
 ConcreteAbstractions._base_types[:AbstractFoo] = ([:T], :(begin; a; b::Int; c::T; d::Vector{T}; end))
 ```
 
 and the child definition:
 
 ```julia
-@extend type Foo <: AbstractFoo
+@extend struct Foo <: AbstractFoo
     e::T
 end
 ```
@@ -42,7 +42,7 @@ end
 is really more like:
 
 ```julia
-type Foo{T} <: AbstractFoo
+struct Foo{T} <: AbstractFoo
     a
     b::Int
     c::T
