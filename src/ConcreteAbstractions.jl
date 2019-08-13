@@ -6,33 +6,30 @@ export
 
 const _base_types = Dict{Symbol, Tuple}()
 
-
 macro base(typeexpr::Expr)
-    # dump(typeexpr)
-    # name = :AbstractFoo # TODO: extract type name
-    @assert typeexpr.head == :type
+    @assert typeexpr.head == :struct
     mutable, nameblock, args = typeexpr.args
 
     # extract name and parameters
-    name, params = if isa(nameblock, Symbol)
-        nameblock, []
-    elseif nameblock.head == :curly
-        nameblock.args[1], nameblock.args[2:end]
-    end
+    name, params =
+        if isa(nameblock, Symbol)
+            nameblock, []
+        elseif nameblock.head == :curly
+            nameblock.args[1], nameblock.args[2:end]
+        end
 
     # add this to our list of base types, then return the call to abstract
     _base_types[name] = params, args
-    # @show name
-    esc(quote
-        abstract $name
-    end)
+
+    # create abstract type with base type name
+    quote
+        abstract type $name end
+    end
 end
 
 macro extend(typeexpr::Expr)
-    # dump(typeexpr)
-    @assert typeexpr.head == :type
+    @assert typeexpr.head == :struct
     mutable, nameblock, args = typeexpr.args
-    # @show args
 
     # create a curly expression for the new type and grab the base name
     @assert isa(nameblock, Expr) && nameblock.head == :(<:)
@@ -41,10 +38,12 @@ macro extend(typeexpr::Expr)
         curly = :($curly{})
     end
 
-    # check that we defined this base type before extracting the base params/args
+    # check that we defined this base type
     if !haskey(_base_types, basename)
         error("You must define a base type $basename")
     end
+
+    # extract the base params/args
     params, baseargs = _base_types[basename]
 
     # add base parameters to def
